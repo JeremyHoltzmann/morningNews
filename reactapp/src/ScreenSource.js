@@ -4,23 +4,20 @@ import { List, Avatar, Button, Row } from "antd";
 import Nav from "./Nav";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { motion } from "framer-motion/dist/framer-motion";
 
 function ScreenSource(props) {
   const [sourceList, setSourceList] = useState([]);
 
   function changeLangue(langue) {
-    console.log(
-      "🚀 ~ file: ScreenArticlesBySource.js ~ line 36 ~ ScreenArticlesBySource ~ langue",
-      langue
-    );
     props.changeLanguage(langue);
   }
 
   useEffect(() => {
-    fetch(
-      "https://newsapi.org/v2/top-headlines/sources?apiKey=dd0594311c8644e7a83119ce2dcdd00b&language=" +
-        props.language
-    )
+    fetch(`/api/top_headlines?language=${props.language}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    })
       .then((response) => response.json())
       .then((data) =>
         setSourceList(
@@ -36,10 +33,10 @@ function ScreenSource(props) {
   }, []);
 
   useEffect(() => {
-    fetch(
-      "https://newsapi.org/v2/top-headlines/sources?apiKey=dd0594311c8644e7a83119ce2dcdd00b&language=" +
-        props.language
-    )
+    fetch(`/api/top_headlines?language=${props.language}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    })
       .then((response) => response.json())
       .then((data) =>
         setSourceList(
@@ -74,19 +71,25 @@ function ScreenSource(props) {
         <List
           itemLayout="horizontal"
           dataSource={sourceList}
-          renderItem={(item) => (
+          renderItem={(item, i) => (
             <List.Item>
-              <List.Item.Meta
-                avatar={
-                  <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                }
-                title={
-                  <Link to={"/screenMyArticlesBySource/" + item.id}>
-                    {item.name}
-                  </Link>
-                }
-                description={item.description}
-              />
+              <motion.div
+                initial={{ x: 200 }}
+                whileInView={{ x: 0 }}
+                transition={{ delay: (i + 0.5) * 0.1 }}
+              >
+                <List.Item.Meta
+                  avatar={
+                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                  }
+                  title={
+                    <Link to={"/screenMyArticlesBySource/" + item.id}>
+                      {item.name}
+                    </Link>
+                  }
+                  description={item.description}
+                />
+              </motion.div>
             </List.Item>
           )}
         />

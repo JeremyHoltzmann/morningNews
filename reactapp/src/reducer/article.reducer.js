@@ -1,5 +1,4 @@
 export default function (articleList = [], action) {
-  console.log("🚀 ~ file: article.reducer.js ~ line 2 ~ action", action);
   if (action.type === "addArticle") {
     var tmpArticles = [...articleList];
     if (tmpArticles.find((element) => element.title === action.article.title))

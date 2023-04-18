@@ -5,7 +5,7 @@ var userController = require("../controller/userController");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express" });
+  res.render("index", { title: "Morning News" });
 });
 
 router.post("/sign-up", async function (req, res, next) {
@@ -34,7 +34,6 @@ router.post("/addArticle", async function (req, res, next) {
 });
 
 router.post("/removeArticle", async function (req, res, next) {
-  console.log("BODY : ", req.body);
   await userController.removeArticle(req.body.token, req.body.id);
   res.json("Ok");
 });

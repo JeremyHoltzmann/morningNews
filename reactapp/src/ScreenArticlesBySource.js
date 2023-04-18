@@ -6,6 +6,8 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import { connect } from "react-redux";
+import { motion } from "framer-motion/dist/framer-motion";
+
 const { Meta } = Card;
 
 function ScreenArticlesBySource(props) {
@@ -56,24 +58,17 @@ function ScreenArticlesBySource(props) {
   }
 
   useEffect(() => {
-    var req =
-      "https://newsapi.org/v2/top-headlines?apiKey=dd0594311c8644e7a83119ce2dcdd00b&language=" +
-      props.language +
-      "&sources=" +
-      id;
+    var req = `/api/articlesBySource?language=${props.language}&sources=${id}`;
     fetch(req)
       .then((response) => response.json())
       .then((data) => {
         setArticleArray(data.articles);
+        console.log(data.articles[0]);
       });
   }, []);
 
   useEffect(() => {
-    var req =
-      "https://newsapi.org/v2/top-headlines?apiKey=dd0594311c8644e7a83119ce2dcdd00b&language=" +
-      props.language +
-      "&sources=" +
-      id;
+    var req = `/api/articlesBySource?language=${props.language}&sources=${id}`;
     fetch(req)
       .then((response) => response.json())
       .then((data) => {
@@ -86,42 +81,63 @@ function ScreenArticlesBySource(props) {
       <Nav />
       <div className="Banner"></div>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <Row gutter={16} type="flex">
+        <Row gutter={16} type="flex" justifyContent="space-between">
           {articleArray.map((element, i) => (
-            <Col key={i} xs={24} lg={8}>
-              <Card
-                style={{
-                  width: 300,
-                  height: 500,
-
-                  margin: "15px",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                }}
-                cover={<img alt="example" src={element.urlToImage} />}
-                actions={[
-                  <Icon
-                    type="read"
-                    key="ellipsis2"
-                    onClick={() => showModal(i)}
-                  />,
-                  <Icon
-                    type="like"
-                    key="ellipsis"
-                    onClick={() =>
-                      addArticle(
-                        element.title,
-                        element.description,
-                        element.content,
-                        element.urlToImage
-                      )
-                    }
-                  />,
-                ]}
+            <Col key={i} xs={24} lg={6}>
+              <motion.div
+                style={{ display: "flex", justifyContent: "center" }}
+                initial={{ opacity: 0.5, rotate: 10 }}
+                whileInView={{ opacity: 1, rotate: 0 }}
+                transition={{ delay: 0.2 }}
+                whileHover={{ scale: 1.05 }}
               >
-                <Meta title={element.title} description={element.description} />
-              </Card>
+                <Card
+                  style={{
+                    width: 300,
+                    height: 500,
+
+                    margin: "15px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                  cover={<img alt="example" src={element.urlToImage} />}
+                  actions={[
+                    <Icon
+                      type="read"
+                      key="ellipsis2"
+                      onClick={() => showModal(i)}
+                    />,
+                    <Icon
+                      type="like"
+                      key="ellipsis"
+                      style={{ color: element.isLiked ? "blue" : "black" }}
+                      onClick={() => {
+                        const articleArrayUpdated = articleArray.map(
+                          (c, index) => {
+                            if (i === index) {
+                              c.isLiked = !c.isLiked;
+                              return c;
+                            } else return c;
+                          }
+                        );
+                        setArticleArray(articleArrayUpdated);
+                        addArticle(
+                          element.title,
+                          element.description,
+                          element.content,
+                          element.urlToImage
+                        );
+                      }}
+                    />,
+                  ]}
+                >
+                  <Meta
+                    title={element.title}
+                    description={element.description}
+                  />
+                </Card>
+              </motion.div>
             </Col>
           ))}
         </Row>

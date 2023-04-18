@@ -69,7 +69,7 @@ function ScreenHome(props) {
       <div className="Sign">
         <Input
           className="Login-input"
-          placeholder="arthur@lacapsule.com"
+          placeholder="email@email.com"
           onChange={(e) => setSignInEmail(e.target.value)}
           value={signInEmail}
         />
@@ -96,7 +96,7 @@ function ScreenHome(props) {
       <div className="Sign">
         <Input
           className="Login-input"
-          placeholder="Arthur G"
+          placeholder="Login"
           onChange={(e) => setSignUpUsername(e.target.value)}
           value={signUpUsername}
         />
@@ -135,9 +135,6 @@ function mapDispatchToProps(dispatch) {
       dispatch({ type: "addArticle", article });
     },
     addArticles: function (articles) {
-      console.log(
-        "🚀 ~ file: ScreenHome.js ~ line 138 ~ mapDispatchToProps ~ addArticles"
-      );
       dispatch({ type: "addArticles", articles });
     },
   };

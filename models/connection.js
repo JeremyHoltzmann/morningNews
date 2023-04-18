@@ -1,4 +1,7 @@
 var mongoose = require("mongoose");
+var dotenv = require("dotenv");
+
+dotenv.config();
 
 var options = {
   connectTimeoutMS: 5000,
@@ -6,10 +9,4 @@ var options = {
   useUnifiedTopology: true,
 };
 
-mongoose.connect(
-  "mongodb+srv://JeremyHoltzmann:TestTest@cluster0.xezpb.mongodb.net/morningnews?retryWrites=true&w=majority",
-  options,
-  function (err) {
-    console.log(err);
-  }
-);
+mongoose.connect(process.env.DATABASE_CONNEXION_STRING, options);

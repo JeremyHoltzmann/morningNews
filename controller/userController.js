@@ -26,7 +26,7 @@ var userController = {
   },
   signIn: async (email, password) => {
     var user = await userModel.findOne({ email: email });
-
+    if (!user) return { result: false, message: "No user found" };
     await user.populate("articles");
     if (bcrypt.compareSync(password, user.password)) {
       return { result: true, message: "Ok", data: { user } };
@@ -77,15 +77,8 @@ var userController = {
   },
 
   removeArticle: async (token, articleId) => {
-    console.log(
-      "🚀 ~ file: userController.js ~ line 80 ~ removeArticle: ~ token",
-      token
-    );
     var user = await userModel.findOne({ token: token });
-    console.log(
-      "🚀 ~ file: userController.js ~ line 81 ~ removeArticle: ~ user",
-      user
-    );
+
     await user.populate("articles");
     user.articles = user.articles.filter((element) => element._id != articleId);
     await user.save();
